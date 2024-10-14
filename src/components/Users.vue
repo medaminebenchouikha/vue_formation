@@ -1,7 +1,20 @@
 <template>
     <h2>Liste des utilisateur</h2>
     <main class="container">
-         <UserCard v-for="user in users" :user="user"/>
+         <UserCard v-for="user in users" :user="user">
+            <!-- <template v-slot:title><h1>Titre</h1></template>
+            <template v-slot:footer><h2>Footer</h2></template> -->
+            <template #title><h1>Titre</h1></template>
+            <template #default>Contenu par default</template>
+            <!-- <template #footer="slotProps">
+                <p>l'utilisateur {{ slotProps.name }} est {{ slotProps.active }}</p>
+            </template> -->
+
+            <template #footer="{name, active}">
+                <p>l'utilisateur {{ name }} est 
+                    <span :style="{ color: active ? 'green' : 'red', fontWeight: 'bold'}">{{ active }}</span></p>
+            </template>
+         </UserCard>
     </main>
 </template>
  
