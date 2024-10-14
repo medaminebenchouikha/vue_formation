@@ -17,8 +17,36 @@
         </li>
     </ul>
 </template>
+<script setup lang="ts">
+import { ref, watch, watchEffect } from 'vue';
 
-<script lang="ts">
+const props = defineProps<{
+    name: string
+}>();
+
+
+const firstNames = ref(['ana', 'Djin', 'Naroto', 'Luffy'])
+const username = ref(props.name);
+console.log(props);
+
+const emits= defineEmits<{
+    'on-search': [string]
+}>();
+
+const onSearch = () => {
+    emits('on-search', username.value);
+}
+
+// watch(() => props.name, (newValue) => {
+//     username.value = newValue
+// })
+
+watchEffect(() => {
+    username.value = props.name
+})
+</script>
+
+<!-- <script lang="ts">
 import type { PropType } from 'vue';
 
 export default {
@@ -47,4 +75,4 @@ export default {
         }
     }
 }
-</script>
+</script> -->

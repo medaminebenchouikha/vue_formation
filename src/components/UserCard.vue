@@ -11,28 +11,22 @@
             {{ user.phone }}
             <hr>
             <small>
-                {{ user.address.street }} {{ user.address.suite }} 
-                <br> {{ user.address.zipcode }} {{ user.address.city }} 
+                {{ user.address?.street }} {{ user.address?.suite }} 
+                <br> {{ user.address?.zipcode }} {{ user.address?.city }} 
             </small>
         </div>
             
         <footer  class="pico-color-zinc-850">
             <small><a href="#">{{ user.website }}</a></small><br>
-            <cite> {{ user.company.name }}</cite>
+            <cite> {{ user.company?.name }}</cite>
         </footer>
     </article>
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
+<script setup lang="ts">
 import type { IUser } from '../interfaces/User';
 
-    export default {
-        props: {
-            user: {
-                type: Object as PropType<IUser>,
-                required: true,
-            }
-        },
-    }
+defineProps<{
+    user : IUser;
+}>();
 </script>

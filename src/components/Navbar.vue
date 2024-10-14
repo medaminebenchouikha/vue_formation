@@ -1,29 +1,39 @@
 <template>
-    <h1>Navbar</h1>
+    <h1>{{ title }}</h1>
     <Search :name="myName" @on-search="listenSearch"/>
     <!-- <Search :name="myName" @on-search="listenSearch($event)"/> -->
-    <button @click="changeName">Changer le nom</button>
+    <button @click="changeName()">Changer le nom</button>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue';
 import Search from './Search.vue';
 
-export default {
-    data() {
-        return {
-            myName : 'Med',
-        }
-    },
-    methods: {
-        listenSearch(username: string) {
-            console.log(username);   
-        },
-        changeName() {
-            this.myName = 'Djin';
-        }
-    },
-    components: {
-        Search
-    }
+let title = ref('My App');
+const myName = ref('Med');
+
+const changeName = () => {
+    myName.value = 'Nouveau titre';
+    console.log('test');
+ }
+
+const listenSearch = (username: string) => {
+    console.log(username);
 }
 </script>
+
+<!-- <script lang="ts">
+export default {
+    setup() { 
+        const title = 'My App';
+        const changeName = () => {
+            console.log('test');
+        }
+
+        return {
+            title,
+            changeName
+        }
+    }
+}
+</script> -->
