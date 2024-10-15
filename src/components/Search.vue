@@ -18,14 +18,15 @@
     </ul>
 </template>
 <script setup lang="ts">
-import { ref, watch, watchEffect } from 'vue';
+import { reactive, ref, watch, watchEffect } from 'vue';
 
 const props = defineProps<{
     name: string
 }>();
 
 
-const firstNames = ref(['ana', 'Djin', 'Naroto', 'Luffy'])
+// const firstNames = ref(['ana', 'Djin', 'Naroto', 'Luffy'])
+const firstNames = reactive(['ana', 'Djin', 'Naroto', 'Luffy'])
 const username = ref(props.name);
 console.log(props);
 

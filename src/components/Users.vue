@@ -1,6 +1,8 @@
 <template>
-    <h2>Liste des utilisateur</h2>
+    <!-- <h2> {{ 'Utilisateur' + (isUsersEmpty ? '' : 's') }}</h2> -->
+    <h2>{{ userWord }}</h2>
     <main class="container">
+        <Opacity :opacity="opacity" color="black" @on-change="changeOpacity"/>
         <Loader :loading>
             <UserCard v-for="user in users" :user="user">
                 <!-- <template v-slot:title><h1>Titre</h1></template>
@@ -23,11 +25,24 @@
 <script setup lang="ts">
 import UserCard from './UserCard.vue';
 import type { IUser } from '../interfaces/User';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Loader from '@/atomics/Loader.vue';
+import Opacity from '@/atomics/Opacity.vue';
 
 const loading = ref<boolean>(true);
+
 const users = ref<IUser[]>([]);
+
+const isUsersEmpty = computed(() => users.value.length == 0);
+console.log(isUsersEmpty.value);
+
+const userWord = computed(() => 'Utilisateur' + (isUsersEmpty.value ? '' : 's'))
+
+const opacity = ref<number>(0.3);
+
+const changeOpacity = (newOpacity: number) => {
+    opacity.value = newOpacity;
+}
 
 onMounted(() => {
     setTimeout(() => {
