@@ -1,8 +1,25 @@
 <template>
     <h1 ref="elTitle">{{ title }}</h1>
-    <Search :name="myName" @on-search="listenSearch"/>
+    <!-- <Search :name="myName" @on-search="listenSearch"/> -->
     <!-- <Search :name="myName" @on-search="listenSearch($event)"/> -->
-    <button @click="changeName()">Changer le nom</button>
+    <!-- <button @click="changeName()">Changer le nom</button> -->
+
+    <nav>
+        <ul>
+            <li><strong>Acme Corp</strong></li>
+        </ul>
+        <ul>
+            <li><router-link to="/">Home</router-link> </li>
+            <li><router-link to="/users">Users</router-link></li>
+            <li>
+                <!-- <router-link to="/login">Login</router-link> -->
+                <!-- <router-link :to ="{ name: 'login'}" custom v-slot="router"> -->
+                <router-link to ="/login" custom v-slot="router">
+                    <button @click="router.navigate">Se connecter</button>
+                </router-link>
+            </li>
+        </ul>
+    </nav>
 </template>
 
 <script setup lang="ts">
