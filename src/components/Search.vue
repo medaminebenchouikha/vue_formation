@@ -18,33 +18,19 @@
     </ul>
 </template>
 <script setup lang="ts">
+import { useSearch } from '@/composables/useSearch';
 import { reactive, ref, watch, watchEffect } from 'vue';
 
 const props = defineProps<{
     name: string
 }>();
 
-
-// const firstNames = ref(['ana', 'Djin', 'Naroto', 'Luffy'])
-const firstNames = reactive(['ana', 'Djin', 'Naroto', 'Luffy'])
-const username = ref(props.name);
-console.log(props);
-
 const emits= defineEmits<{
-    'on-search': [string]
-}>();
+        'on-search': [string]
+    }>();
 
-const onSearch = () => {
-    emits('on-search', username.value);
-}
+const {username, onSearch, firstNames} = useSearch(props, emits);
 
-// watch(() => props.name, (newValue) => {
-//     username.value = newValue
-// })
-
-watchEffect(() => {
-    username.value = props.name
-})
 </script>
 
 <!-- <script lang="ts">

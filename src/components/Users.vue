@@ -1,18 +1,20 @@
 <template>
-    <!-- <h2> {{ 'Utilisateur' + (isUsersEmpty ? '' : 's') }}</h2> -->
     <h2>{{ userWord }}</h2>
     <main class="container">
         <Opacity :opacity="opacity" color="black" @on-change="changeOpacity"/>
+
+        
+
         <Loader :loading>
-            <UserCard v-for="user in users" :user="user">
-                <!-- <template v-slot:title><h1>Titre</h1></template>
-                <template v-slot:footer><h2>Footer</h2></template> -->
+            <select name="extensions" aria-label="extension..." v-model="extSelected">
+                <option selected value="">
+                    selectionnée votre extension...
+                </option>
+                <option v-for="ext in extensions" :key="ext">{{ext}}</option>
+            </select>
+            <UserCard v-for="user in usersFiltred" :user="user" :key="user.id">
                 <template #title><h1>Titre</h1></template>
                 <template #default>Contenu par default</template>
-                <!-- <template #footer="slotProps">
-                    <p>l'utilisateur {{ slotProps.name }} est {{ slotProps.active }}</p>
-                </template> -->
-
                 <template #footer="{name, active}">
                     <p>l'utilisateur {{ name }} est 
                         <span :style="{ color: active ? 'green' : 'red', fontWeight: 'bold'}">{{ active }}</span></p>
@@ -28,18 +30,18 @@ import type { IUser } from '../interfaces/User';
 import { computed, onMounted, ref } from 'vue';
 import Loader from '@/atomics/Loader.vue';
 import Opacity from '@/atomics/Opacity.vue';
+import { useExtensionFilter } from '@/composables/useExtensionFilter';
 
 const loading = ref<boolean>(true);
-
+const extensions: string[] = ['tv', 'bis', 'io', 'me'];
 const users = ref<IUser[]>([]);
 
-const isUsersEmpty = computed(() => users.value.length == 0);
-console.log(isUsersEmpty.value);
+const {extSelected, usersFiltred} = useExtensionFilter(users);
 
+const isUsersEmpty = computed(() => users.value.length == 0);
 const userWord = computed(() => 'Utilisateur' + (isUsersEmpty.value ? '' : 's'))
 
 const opacity = ref<number>(0.3);
-
 const changeOpacity = (newOpacity: number) => {
     opacity.value = newOpacity;
 }
