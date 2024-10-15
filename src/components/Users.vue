@@ -2,9 +2,6 @@
     <h2>{{ userWord }}</h2>
     <main class="container">
         <Opacity :opacity="opacity" color="black" @on-change="changeOpacity"/>
-
-        
-
         <Loader :loading>
             <select name="extensions" aria-label="extension..." v-model="extSelected">
                 <option selected value="">
@@ -12,14 +9,25 @@
                 </option>
                 <option v-for="ext in extensions" :key="ext">{{ext}}</option>
             </select>
-            <UserCard v-for="user in usersFiltred" :user="user" :key="user.id">
-                <template #title><h1>Titre</h1></template>
-                <template #default>Contenu par default</template>
-                <template #footer="{name, active}">
-                    <p>l'utilisateur {{ name }} est 
-                        <span :style="{ color: active ? 'green' : 'red', fontWeight: 'bold'}">{{ active }}</span></p>
-                </template>
-            </UserCard>
+            <div>
+                <label for="">Enter user Id</label>
+                <input type="number" v-model="indexUser">
+                <button v-if="indexUser" @click="scrollToUser"> Scroll to User</button>
+                <p v-if="errorMessage" :style="{color: 'red'}"> {{ errorMessage }}</p>
+            </div>
+
+            <!-- <div v-for="(user, index) in usersFiltred" :key="user.id" :ref="el => userRefs[index] = el as HTMLElement" -->
+            <div v-for="(user, index) in usersFiltred" :key="user.id"        
+             ref="userItems">
+                <UserCard :user="user">
+                    <template #title><h1>Titre</h1></template>
+                    <template #default>Contenu par default</template>
+                    <template #footer="{name, active}">
+                        <p>l'utilisateur {{ name }} est 
+                            <span :style="{ color: active ? 'green' : 'red', fontWeight: 'bold'}">{{ active }}</span></p>
+                    </template>
+                </UserCard>
+            </div>
         </Loader>
     </main>
 </template>
@@ -27,7 +35,7 @@
 <script setup lang="ts">
 import UserCard from './UserCard.vue';
 import type { IUser } from '../interfaces/User';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, reactive, ref, useTemplateRef, type ShallowRef } from 'vue';
 import Loader from '@/atomics/Loader.vue';
 import Opacity from '@/atomics/Opacity.vue';
 import { useExtensionFilter } from '@/composables/useExtensionFilter';
@@ -35,6 +43,24 @@ import { useExtensionFilter } from '@/composables/useExtensionFilter';
 const loading = ref<boolean>(true);
 const extensions: string[] = ['tv', 'bis', 'io', 'me'];
 const users = ref<IUser[]>([]);
+
+const indexUser = ref<number>(0);
+
+//const userRefs = ref<any>();
+//const userRefs = reactive<HTMLElement[]>([]);
+const userRefs = useTemplateRef<HTMLElement[]>('userItems');
+const errorMessage = ref<string>('');
+const scrollToUser = () => {
+    // const userElement = userRefs[indexUser.value - 1];
+    const userElement = userRefs.value?.[indexUser.value - 1];
+    if (!userElement) {
+        errorMessage.value = 'user not found!'
+        return
+    }
+    
+    userElement.scrollIntoView({ behavior: 'smooth', block: 'center'});
+    errorMessage.value = "";
+}
 
 const {extSelected, usersFiltred} = useExtensionFilter(users);
 
