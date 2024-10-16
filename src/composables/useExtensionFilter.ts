@@ -1,7 +1,12 @@
 import type { IUser } from "@/interfaces/User";
-import { computed, ref, type Ref } from "vue";
+import { computed, ref, type ComputedRef, type Ref } from "vue";
 
-export function useExtensionFilter (users: Ref<IUser[]>) {
+type ExtensionFilter = {
+    extSelected : Ref<string>,
+    usersFiltred: ComputedRef<IUser[]>
+}
+
+export function useExtensionFilter (users: Ref<IUser[]>)  : ExtensionFilter{
     const extSelected = ref<string>('');
     const usersFiltred = computed(() => {
         if(!extSelected.value) {

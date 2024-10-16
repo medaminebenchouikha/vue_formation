@@ -8,6 +8,7 @@
         </div>
         <header>
             <h3>{{ user.name }}</h3>
+            <button @click="emits('on-delete', user.id)"> Supprimer </button>
         </header>
         <div>
             <strong>{{ user.username }}</strong>
@@ -31,12 +32,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import type { IUser } from '../interfaces/User';
 
 const isActive = ref<boolean>(false);
 
-defineProps<{
+ defineProps<{
     user : IUser;
 }>();
+
+const emits = defineEmits<{
+        'on-delete': [number]
+    }>();
 </script>
